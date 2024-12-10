@@ -1,62 +1,65 @@
+// Variables to keep track of scores
+let playerScore = 0;
+let computerScore = 0;
+
+// Function to get computer's choice
 function getComputerChoice() {
-    let a = "Rock";
-    let b = "Paper";
-    let c = "Scissor";
+    const choices = ["Rock", "Paper", "Scissor"];
+    return choices[Math.floor(Math.random() * choices.length)];
+}
 
-    let randomnumber = Math.random();
+// Function to play a single round
+function playRound(playerSelection, computerSelection) {
+    if (playerSelection === computerSelection) {
+        return `It's a tie! Both chose ${playerSelection}.`;
+    }
 
-    if (randomnumber < 0.33) {
-        return a;
-    } else if (randomnumber >= 0.33 && randomnumber < 0.66) {
-        return b;
+    if (
+        (playerSelection === "Rock" && computerSelection === "Scissor") ||
+        (playerSelection === "Paper" && computerSelection === "Rock") ||
+        (playerSelection === "Scissor" && computerSelection === "Paper")
+    ) {
+        playerScore++;
+        return `You win! ${playerSelection} beats ${computerSelection}.`;
     } else {
-        return c;
+        computerScore++;
+        return `You lose! ${computerSelection} beats ${playerSelection}.`;
     }
 }
+
+// Function to update the UI
+function updateUI(resultText) {
+    // Update round result
+    document.getElementById("round-result").textContent = resultText;
+
+    // Update scores
+    document.getElementById("player-score").textContent = playerScore;
+    document.getElementById("computer-score").textContent = computerScore;
+
+    // Check if a player has reached 5 points
+    if (playerScore === 5 || computerScore === 5) {
+        const winnerText =
+            playerScore === 5
+                ? "Congratulations! You won the game!"
+                : "Sorry, you lost. Better luck next time!";
+        document.getElementById("winner").textContent = winnerText;
+
+        // Disable buttons
+        document.querySelectorAll("button").forEach(button => {
+            button.disabled = true;
+        });
+    }
+}
+
+// Event listener function for player choices
 function handlePlayerChoice(event) {
     const playerSelection = event.target.textContent;
     const computerSelection = getComputerChoice();
     const result = playRound(playerSelection, computerSelection);
+    updateUI(result);
 }
 
+// Add event listeners to buttons
 document.getElementById("rock").addEventListener("click", handlePlayerChoice);
 document.getElementById("paper").addEventListener("click", handlePlayerChoice);
 document.getElementById("scissors").addEventListener("click", handlePlayerChoice);
-
-let humanScore = 0;
-let computerScore = 0;
-
-function playRound(humanChoice, computerChoice) {
-    if (humanChoice === "Rock" && computerChoice === "Paper") {
-        console.log("You lose");
-        computerScore++;
-    } else if (humanChoice === "Rock" && computerChoice === "Scissor") {
-        console.log("You win");
-        humanScore++;
-    } else if (humanChoice === "Paper" && computerChoice === "Scissor") {
-        console.log("You lose");
-        computerScore++;
-    } else if (humanChoice === "Paper" && computerChoice === "Rock") {
-        console.log("You win");
-        humanScore++;
-    } else if (humanChoice === "Scissor" && computerChoice === "Rock") {
-        console.log("You lose");
-        computerScore++;
-    } else if (humanChoice === "Scissor" && computerChoice === "Paper") {
-        console.log("You win");
-        humanScore++;
-    } else {
-        console.log("Tie");
-    }
-}
-
-function playGame() {
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice();
-    playRound(humanSelection, computerSelection);
-
-    console.log(`Human Score: ${humanScore}`);
-    console.log(`Computer Score: ${computerScore}`);
-}
-
-playGame();
