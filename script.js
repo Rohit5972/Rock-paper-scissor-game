@@ -13,18 +13,15 @@ function getComputerChoice() {
         return c;
     }
 }
-
-function getHumanChoice() {
-    let usersinput = prompt("Write any one of Rock, Paper, or Scissor").trim();
-    usersinput = usersinput.charAt(0).toUpperCase() + usersinput.slice(1).toLowerCase();
-
-    if (usersinput === "Rock" || usersinput === "Paper" || usersinput === "Scissor") {
-        return usersinput;
-    } else {
-        console.log("Invalid input. Please enter Rock, Paper, or Scissor.");
-        return getHumanChoice(); // Recursively call the function until a valid input is given
-    }
+function handlePlayerChoice(event) {
+    const playerSelection = event.target.textContent;
+    const computerSelection = getComputerChoice();
+    const result = playRound(playerSelection, computerSelection);
 }
+
+document.getElementById("rock").addEventListener("click", handlePlayerChoice);
+document.getElementById("paper").addEventListener("click", handlePlayerChoice);
+document.getElementById("scissors").addEventListener("click", handlePlayerChoice);
 
 let humanScore = 0;
 let computerScore = 0;
